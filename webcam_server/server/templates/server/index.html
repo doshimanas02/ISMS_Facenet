@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Cam</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        var timeoutVar;
+        document.addEventListener("DOMContentLoaded", () => {
+            var start = document.getElementById("start");
+            var stop = document.getElementById("stop");
+            var click_button = document.getElementById("click");
+            var video = document.getElementById("vid");
+            var mediaDevices = navigator.mediaDevices;
+            let canvas = document.querySelector("#canvas");
+            vid.muted = true;
+            var ctr = 5;
+            start.addEventListener("click", () => {
+                $("#data_list").html("");
+                // Accessing the user camera and video.
+                mediaDevices
+                    .getUserMedia({
+                        video: true,
+                        audio: false,
+                    })
+                    .then((stream) => {
+                        // Changing the source of video to current stream.
+                        video.srcObject = stream;
+                        video.addEventListener("loadedmetadata", () => {
+                            video.play();
+                        });
+                        
+                        function sleep(ms) {
+                            return new Promise(resolve => setTimeout(resolve, ms));
+                        }
+
+                        async function send_data() {
+                            var photos = [];
+                            for (i = 0; i < 5; i++) {
+                                await sleep(1000);
+                                canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                                let image_data_url = canvas.toDataURL('image/png');
+                                photos[i] = image_data_url;
+                            }
+                            $.ajax({
+                                type: "POST",
+                                url: "/uploadImage/",
+                                data: {'photo0': photos[0], 'photo1': photos[1], 'photo2': photos[2], 'photo3': photos[3], 'photo4': photos[4]},
+                                success: function(data){
+                                    print_data(data);
+                                }
+                            });
+                        }
+
+                        async function print_data(data) {
+                            var list_html = "<table>";
+                            $.each(data, function(key, value) {
+                                list_html += "<tr>";
+                                list_html += "<td>";
+                                list_html += key;
+                                list_html += "<td>";
+                                list_html += value;
+                                list_html += "</tr>";
+                            });
+                            list_html += "</table>";
+                            $("#data_list").html(list_html);
+                        }
+
+                        send_data().then(() => {
+                            stop.click()
+                        });
+                    })
+                    .catch(alert);
+            });
+
+            stop.onclick = function () {
+                video.srcObject.getVideoTracks()[0].stop();
+                video.src = '';
+                clearTimeout(timeoutVar);
+                ctr = 5;
+                // localStream.getAudioTracks()[0].stop();
+                // audio.src = '';
+            };
+
+            click_button.addEventListener('click', function () {
+                
+                var sendBase64ToServer = function (name, base64) {
+                    // var xhr = new XMLHttpRequest();
+                    // xhr.open("POST", "uploadImage/", true);
+                    // xhr.setRequestHeader('Content-Type', 'application/json');
+                    $.ajax({
+                        type: 'POST',
+                        // make sure you respect the same origin policy with this url:
+                        // http://en.wikipedia.org/wiki/Same_origin_policy
+                        url: '/uploadImage/',
+                        data: {
+                            'text': 'bobo',
+                            'image': base64 // <-- the $ sign in the parameter name seems unusual, I would avoid it
+                        },
+                        success: function(msg){
+                            console.log('wow ' + msg);
+                        }
+                    });
+                    // xhr.send(data);
+                };
+                sendBase64ToServer("image", image_data_url);
+                // data url of the image
+                console.log(image_data_url);
+            });
+        })();
+    </script>
+</head>
+
+<style>
+    div {
+        width: 500px;
+        height: 400px;
+        border: 2px solid black;
+        position: relative;
+    }
+
+    video {
+        width: 500px;
+        height: 400px;
+        object-fit: cover;
+    }
+</style>
+
+<body>
+    <center>
+        <div>
+            <video id="vid"></video>
+        </div>
+        <br />
+        <button id="start" autoplay>
+            Start Webcam
+        </button>
+        <button style="display: none;" id="stop" autoplay>
+            Stop Webcam
+        </button>
+
+        <button style="display: none;" id="click" autoplay>
+            Click Photo
+        </button>
+        <div id="data_list"> </div>
+    </center>
+    <canvas style = "display: none;" id="canvas" width="320" height="240"></canvas>
+</body>
+
+</html>
