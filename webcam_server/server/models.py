@@ -109,3 +109,4 @@ class accuracy(models.Model):
     correct = models.IntegerField()
     incorrect = models.IntegerField()
     unknown = models.IntegerField()
+
