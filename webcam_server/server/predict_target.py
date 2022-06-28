@@ -1,20 +1,24 @@
-import connector as c
-from detect_faces_dlib import dlib_corrected
-from process_dataset import create_array_from_image
+import sqlite3
+from collections import defaultdict
+from pprint import pprint
+# from connector import connection as c
+from .detect_faces_dlib import dlib_corrected
+from .process_dataset import create_array_from_image
 import pandas as pd
-from generate_embeddings import get_embedding
+from .generate_embeddings import get_embedding
 import math
 import cv2
-
-
+import numpy as np
+connection = sqlite3.connect(r'C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\database\facialdb.db', check_same_thread=False)
+cursor = connection.cursor()
+# cursor = c()
 def predict(file_path):
     data = pd.DataFrame(columns=['img'])
     pixel_array = create_array_from_image(file_path)
-    print(pixel_array.shape)
+    # print(pixel_array.shape)
     data = data.append({'img': pixel_array}, ignore_index=True)
     data_image = dlib_corrected(data, data_type='test')
-    print(data_image.shape)
-    cv2.imwrite('img.jpg', data_image[0])
+    # print(data_image.shape)
     embedding = get_embedding(data_image[0])
     # target_statement = ''
     # for i, value in zip(range(len(embedding)), embedding):
@@ -30,14 +34,14 @@ def predict(file_path):
 
         if i < len(embedding) - 1:
             target_statement += " union all "
-    print(target_statement)
+    # print(target_statement)
 
     select_statement = f"""
         select * 
         from (
             select img_name, sum(subtract_dims) as distance_squared
             from (
-                select img_name, (source - target) * (source - target) as subtract_dims
+                select img_name, source, target
                 from (
                     select meta.img_name, emb.value as source, target.value as target
                     from face_meta meta left join face_embeddings emb
@@ -53,27 +57,53 @@ def predict(file_path):
         where distance_squared < 100
         order by distance_squared asc
     """
+    # print(target_statement)
+    select_statement2 = f"""
+        select img_name, source, target from ( 
+        select meta.img_name, emb.value as source, target.value as target from 
+        face_meta meta left join face_embeddings emb on meta.id = emb.face_id 
+        left join ( {target_statement} ) target on emb.dimension = target.dimension )
+    """
 
-    results = c.cursor.execute(select_statement)
+    results = cursor.execute(select_statement2)
 
-    instances = []
+    vector = defaultdict(list)
+    sim_dict = dict()
     for result in results:
-        img_name = result[0]
-        distance_squared = result[1]
+        print(result)
+        vector[result[0]].append((result[1], result[2]))
 
-        instance = []
-        instance.append(img_name)
-        instance.append(math.sqrt(distance_squared))
-        instances.append(instance)
+    for key, value in vector.items():
+        arr1 = []
+        arr2 = []
+        for source, target in value:
+            arr1.append(source)
+            arr2.append(target)
+        source = np.asarray(arr1, dtype='float64')
+        target = np.asarray(arr2, dtype='float64')
+        sim = findCosineSimilarity(source, target)
+        sim_dict[key] = sim
+    # print(vector)
+    temp = min(sim_dict.values())
+    res = [key for key in sim_dict if sim_dict[key] == temp]
+    print(temp, res)
+    if temp < 0.3:
+        return res
+    else:
+        return 'unknown'
 
-    result_df = pd.DataFrame(instances, columns=["img_name", "distance"])
 
-    print(result_df)
+def findCosineSimilarity(source_representation, test_representation):
+    a = np.matmul(np.transpose(source_representation), test_representation)
+    b = np.sum(np.multiply(source_representation, source_representation))
+    c = np.sum(np.multiply(test_representation, test_representation))
+    return 1 - (a / (np.sqrt(b) * np.sqrt(c)))
 
 
 def main():
-    predict(r'C:\Users\Administrator\Pictures\target.jpg')
+    pass
+    # predict(r'C:\Users\Administrator\Datasets\temp.jpg')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

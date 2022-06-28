@@ -1,40 +1,38 @@
 import os
-
 from .models import Face
-from .prediction import predict_adv, detect_face
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from pybase64 import b64decode
 import time
 import json
-from django.http import JsonResponse
 from collections import defaultdict
-import requests
+from .predict_target import predict
 
 @csrf_exempt
 def process_image(request):
     user_list = list()
-    path = 'server/static/images/temp/'
+    path = r'C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\static\temp'
     if request.method == 'POST':
         # print(request.POST.getlist('data[]'))
         for i in range(5):
             img_data = request.POST[f'photo{i}']
             # print(img_data)
             format, imgstr = img_data.split(';base64,')
-            file_path = f"{path}{time.strftime('%Y%m%d-%H%M%S')}'m'{i}.png"
+            file_path = f"{path}\{time.strftime('%Y%m%d-%H%M%S')}'m'{i}.jpg"
             with open(file_path, 'wb') as f:
                 f.write(b64decode(imgstr))
-            detect_face(file_path)
-            predictions = predict_adv(file_path)
-            user = retrieve_data(predictions)
-            if user['Name'] != 'unknown':
-                for fi in os.listdir(path):
-                    file_path = str(path) + str(fi)
-                    os.remove(file_path)
+            prediction = predict(file_path)[0]
+            print('Here ', prediction)
+            if prediction != 'u':
+                user = retrieve_data(prediction)
+                if user['Name'] != 'u':
+                    for fi in os.listdir(path):
+                        file_path = str(path) + "\\" + str(fi)
+                        os.remove(file_path)
                 return HttpResponse(json.dumps(user), content_type="application/json")
 
     for f in os.listdir(path):
-        file_path = str(path) + str(f)
+        file_path = str(path) + "\\" + str(f)
         os.remove(file_path)
 
     unknown_dict = defaultdict()
@@ -76,6 +74,7 @@ def retrieve_data(adhar):
     udata['B'] = 'unknown'
     udata['snumber'] = 'unknown'
     return udata
+
 
 def index(request):
     # print("BOBO")

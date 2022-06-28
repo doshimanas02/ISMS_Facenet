@@ -94,7 +94,7 @@ def process_faces(image, rects, dim, data_type='train'):
 
 def main():
     path = 'C:/Users/Administrator/PycharmProjects/ISMS_DeepFace/webcam_server/server'
-    data = pd.read_pickle(path + '/static/lfw_faces.pkl')
+    data = pd.read_pickle(path + '/static/dataset.pkl')
     # print(data['class'])
     arr1, arr2 = dlib_corrected(data)
     np.save(path + '/static/data1.pkl', arr=arr1)

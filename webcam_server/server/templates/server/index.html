@@ -42,7 +42,7 @@
                             for (i = 0; i < 5; i++) {
                                 await sleep(1000);
                                 canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-                                let image_data_url = canvas.toDataURL('image/png');
+                                let image_data_url = canvas.toDataURL('image/jpeg');
                                 photos[i] = image_data_url;
                             }
                             $.ajax({
