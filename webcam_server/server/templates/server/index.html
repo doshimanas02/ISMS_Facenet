@@ -45,6 +45,7 @@
                                 let image_data_url = canvas.toDataURL('image/jpeg');
                                 photos[i] = image_data_url;
                             }
+                            console.log(photos);
                             $.ajax({
                                 type: "POST",
                                 url: "/uploadImage/",

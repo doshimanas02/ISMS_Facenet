@@ -9,16 +9,21 @@ from .generate_embeddings import get_embedding
 import math
 import cv2
 import numpy as np
-connection = sqlite3.connect(r'C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\database\facialdb.db', check_same_thread=False)
+
+connection = sqlite3.connect(
+    r'C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\database\facialdb.db',
+    check_same_thread=False)
 cursor = connection.cursor()
+
+
 # cursor = c()
-def predict(file_path):
+def predict(image):
     data = pd.DataFrame(columns=['img'])
-    pixel_array = create_array_from_image(file_path)
+    pixel_array = np.asarray(image)
     # print(pixel_array.shape)
     data = data.append({'img': pixel_array}, ignore_index=True)
     data_image = dlib_corrected(data, data_type='test')
-    # print(data_image.shape)
+    print(data_image.shape)
     embedding = get_embedding(data_image[0])
     # target_statement = ''
     # for i, value in zip(range(len(embedding)), embedding):
@@ -70,7 +75,7 @@ def predict(file_path):
     vector = defaultdict(list)
     sim_dict = dict()
     for result in results:
-        print(result)
+        # print(result)
         vector[result[0]].append((result[1], result[2]))
 
     for key, value in vector.items():

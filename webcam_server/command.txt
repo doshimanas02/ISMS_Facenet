@@ -1,0 +1,1 @@
+python manage.py runserver_plus --cert-file cert.pem --key-file key.pem --keep-meta-shutdown 11.0.0.221:8000
