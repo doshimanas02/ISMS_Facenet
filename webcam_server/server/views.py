@@ -1,5 +1,5 @@
+import datetime
 import os
-from .models import Face
 from django.shortcuts import render, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from pybase64 import b64decode
@@ -8,7 +8,7 @@ import json, io
 from collections import defaultdict
 from .predict_target import predict
 from PIL import Image
-from .process_request import process_requested_img
+from .models import Face
 
 @csrf_exempt
 def process_image(request):
@@ -55,6 +55,34 @@ def retrieve_data(adhar):
     udata['snumber'] = 'unknown'
     return udata
 
+
+@csrf_exempt
+def get_with_aadhaar(request):
+    aadhar_no = request.POST['aadhaar']
+    data = retrieve_data(aadhar_no)
+    if data['Name'] != 'unknown':
+        return HttpResponse(json.dumps(data), content_type="application/json")
+    else:
+        return HttpResponse('unknown')
+
+@csrf_exempt
+def add_data(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        rank = request.POST['rank']
+        number = request.POST['number']
+        aadhar = request.POST['aadhar']
+        blacklist = request.POST['blacklist']
+        category = request.POST['category']
+        gender = request.POST['gender']
+        snumber = request.POST['snumber']
+        date = datetime.datetime.now().date()
+        time = datetime.datetime.now().time()
+        username = 'Dhairya'
+
+        add_data.Face(name=name, rank=rank, number=number, adharno=aadhar, blacklist=blacklist, cat=category,
+                      gender=gender, snumber=snumber, date=date, time=time)
+        add_data.save()
 
 def index(request):
     # print("BOBO")
