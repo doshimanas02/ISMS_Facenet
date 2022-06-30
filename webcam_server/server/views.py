@@ -86,19 +86,19 @@ def add_data(request):
         print(blacklist, category, gender)
         data = Face(name=name, rank=rank, number=number, adharno=aadhar, blacklist=blacklist, cat=category,
                       gender=gender, snumber=snumber, date=date, time=time, username=username)
-        # try:
-        #     original_umask = os.umask(0o777)
-        #     os.mkdir(f'C:/Users/Administrator/Datasets/dataset/{aadhar}')
-        # except PermissionError or FileExistsError:
-        #     print("Permission denied or File already exists")
-        #     exit(1)
-        # for i in range(5):
-        #     img_data = request.POST[f'photo{i}']
-        #     format, imgstr = img_data.split(';base64,')
-        #     imgstr = b64decode(imgstr)
-        #     with open(dest_path + '/' + f"photo{i}.png", "wb") as fh:
-        #         fh.write(imgstr)
-        #
+        try:
+            original_umask = os.umask(0o777)
+            os.mkdir(f'C:/Users/Administrator/Datasets/dataset/{aadhar}')
+        except PermissionError or FileExistsError:
+            print("Permission denied or File already exists")
+            exit(1)
+        for i in range(5):
+            img_data = request.POST[f'photo{i}']
+            format, imgstr = img_data.split(';base64,')
+            imgstr = b64decode(imgstr)
+            with open(f'C:/Users/Administrator/Datasets/dataset/{aadhar}' + '/' + f"photo{i}.png", "wb") as fh:
+                fh.write(imgstr)
+
         # add_new_instance(adharno_path=dest_path)
         # data.save()
         return HttpResponse("success")

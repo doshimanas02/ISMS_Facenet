@@ -1,7 +1,7 @@
 import os
 import pickle
 import pandas as pd
-import cupy as np
+import numpy as np
 from PIL import Image
 
 
