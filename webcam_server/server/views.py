@@ -7,6 +7,7 @@ import time
 import json, io
 from collections import defaultdict
 from .predict_target import predict
+from .new_instance import add_new_instance
 from PIL import Image
 from .models import Face
 
@@ -14,7 +15,6 @@ from .models import Face
 def process_image(request):
     path = r'C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\static\temp'
     if request.method == 'POST':
-        # print(request.POST.getlist('data[]'))
         for i in range(5):
             img_data = request.POST[f'photo{i}']
             format, imgstr = img_data.split(';base64,')
@@ -65,8 +65,10 @@ def get_with_aadhaar(request):
     else:
         return HttpResponse('unknown')
 
+
 @csrf_exempt
 def add_data(request):
+    path = "C:/Users/Administrator/Datasets/dataset"
     if request.method == 'POST':
         name = request.POST['name']
         rank = request.POST['rank']
@@ -78,11 +80,24 @@ def add_data(request):
         snumber = request.POST['snumber']
         date = datetime.datetime.now().date()
         time = datetime.datetime.now().time()
-        username = 'Dhairya'
+        username = 'Nirma_CSE'
 
         add_data.Face(name=name, rank=rank, number=number, adharno=aadhar, blacklist=blacklist, cat=category,
-                      gender=gender, snumber=snumber, date=date, time=time)
+                      gender=gender, snumber=snumber, date=date, time=time, username=username)
+        dest_path = os.path.join(path, f'/{aadhar}')
+        os.mkdir(dest_path)
+        for i in range(5):
+            img_data = request.POST[f'photo{i}']
+            format, imgstr = img_data.split(';base64,')
+            imgstr = b64decode(imgstr)
+            with open(dest_path + '/' + f"photo{i}.png", "wb") as fh:
+                fh.write(imgstr)
+
+        add_new_instance(adharno_path=dest_path)
         add_data.save()
+        return HttpResponse("success")
+    return HttpResponse("Failed!: POST request expected")
+
 
 def index(request):
     # print("BOBO")

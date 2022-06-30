@@ -85,32 +85,6 @@
                 // localStream.getAudioTracks()[0].stop();
                 // audio.src = '';
             };
-
-            click_button.addEventListener('click', function () {
-                
-                var sendBase64ToServer = function (name, base64) {
-                    // var xhr = new XMLHttpRequest();
-                    // xhr.open("POST", "uploadImage/", true);
-                    // xhr.setRequestHeader('Content-Type', 'application/json');
-                    $.ajax({
-                        type: 'POST',
-                        // make sure you respect the same origin policy with this url:
-                        // http://en.wikipedia.org/wiki/Same_origin_policy
-                        url: '/uploadImage/',
-                        data: {
-                            'text': 'bobo',
-                            'image': base64 // <-- the $ sign in the parameter name seems unusual, I would avoid it
-                        },
-                        success: function(msg){
-                            console.log('wow ' + msg);
-                        }
-                    });
-                    // xhr.send(data);
-                };
-                sendBase64ToServer("image", image_data_url);
-                // data url of the image
-                console.log(image_data_url);
-            });
         })();
     </script>
 </head>
@@ -141,10 +115,6 @@
         </button>
         <button style="display: none;" id="stop" autoplay>
             Stop Webcam
-        </button>
-
-        <button style="display: none;" id="click" autoplay>
-            Click Photo
         </button>
         <div id="data_list"> </div>
     </center>
