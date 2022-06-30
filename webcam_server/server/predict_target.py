@@ -3,7 +3,7 @@ from collections import defaultdict
 from .detect_faces_dlib import dlib_corrected
 import pandas as pd
 from .generate_embeddings import get_embedding
-import numpy as np
+import cupy as np
 
 connection = sqlite3.connect(
     r'C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\database\facialdb.db',

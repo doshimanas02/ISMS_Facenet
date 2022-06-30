@@ -9,7 +9,8 @@ from collections import defaultdict
 from .predict_target import predict
 from .new_instance import add_new_instance
 from PIL import Image
-from .models import Face
+from .models import Face, Save
+from django.db.models import Q
 
 @csrf_exempt
 def process_image(request):
@@ -80,23 +81,67 @@ def add_data(request):
         snumber = request.POST['snumber']
         date = datetime.datetime.now().date()
         time = datetime.datetime.now().time()
-        username = 'Nirma_CSE'
+        username = 'Dhairya'
 
-        add_data.Face(name=name, rank=rank, number=number, adharno=aadhar, blacklist=blacklist, cat=category,
+        print(blacklist, category, gender)
+        data = Face(name=name, rank=rank, number=number, adharno=aadhar, blacklist=blacklist, cat=category,
                       gender=gender, snumber=snumber, date=date, time=time, username=username)
-        dest_path = os.path.join(path, f'/{aadhar}')
-        os.mkdir(dest_path)
-        for i in range(5):
-            img_data = request.POST[f'photo{i}']
-            format, imgstr = img_data.split(';base64,')
-            imgstr = b64decode(imgstr)
-            with open(dest_path + '/' + f"photo{i}.png", "wb") as fh:
-                fh.write(imgstr)
-
-        add_new_instance(adharno_path=dest_path)
-        add_data.save()
+        # try:
+        #     original_umask = os.umask(0o777)
+        #     os.mkdir(f'C:/Users/Administrator/Datasets/dataset/{aadhar}')
+        # except PermissionError or FileExistsError:
+        #     print("Permission denied or File already exists")
+        #     exit(1)
+        # for i in range(5):
+        #     img_data = request.POST[f'photo{i}']
+        #     format, imgstr = img_data.split(';base64,')
+        #     imgstr = b64decode(imgstr)
+        #     with open(dest_path + '/' + f"photo{i}.png", "wb") as fh:
+        #         fh.write(imgstr)
+        #
+        # add_new_instance(adharno_path=dest_path)
+        # data.save()
         return HttpResponse("success")
     return HttpResponse("Failed!: POST request expected")
+
+@csrf_exempt
+def entry(request):
+    if request.POST['val'] == 'In':
+        aadhar = request.POST['aadhar']
+        person = Save.objects.filter(adharno=aadhar).last()
+        # print(type(person.dateout))
+        if (person and person.dateout is not None) or not person:
+            name = request.POST['name']
+            rank = request.POST['rank']
+            number = request.POST['number']
+            blacklist = request.POST['blacklist']
+            category = request.POST['category']
+            gender = request.POST['gender']
+            snumber = request.POST['snumber']
+            token = request.POST['token']
+            datein = datetime.datetime.now().date()
+            timein = datetime.datetime.now().time()
+
+            add_to_db = Save(name=name, rank=rank, number=number, adharno=aadhar, blacklist=blacklist, cat=category,
+                          snumber=snumber, datein=datein, timein=timein, token=token)
+            add_to_db.save()
+            return HttpResponse('Ingress recorded successfully.')
+        else:
+            return HttpResponse('The system has not yet recorded the person\'s egress. Please record the same to continue. ')
+
+    if request.POST['val'] == 'Out':
+        aadhar = request.POST['aadhar']
+        person_data = Save.objects.filter(adharno=aadhar, dateout=None).last()
+        if person_data:
+            person_data.timeout = datetime.datetime.now().time()
+            person_data.dateout = datetime.datetime.now().date()
+            person_data.save()
+            return HttpResponse('Egress recorded successfully.')
+        else:
+            return HttpResponse(
+                'The system has not yet recorded the person\'s ingress. Please record the same to continue. ')
+
+    return HttpResponse('Invalid Request')
 
 
 def index(request):

@@ -93,7 +93,6 @@ class Save(models.Model):
     cat = models.CharField(max_length=50)
     blacklist = models.CharField(max_length=50)
     place = models.CharField(max_length=50, null=True)
-    supervisor = models.CharField(max_length=50, null=True)
     token = models.CharField(max_length=50, null=True)
     timein = models.TimeField(null=True)
     datein = models.DateField(null=True)
