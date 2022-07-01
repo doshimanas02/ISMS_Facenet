@@ -27,9 +27,12 @@ def load_and_execute(face_array, label_array):
         r'C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\database\facialdb.db')
     cursor1 = connection.cursor()
     cursor2 = connection.cursor()
+
     for pixels, label in zip(face_array, label_array):
         embedding = get_embedding(pixels)
         insert_statement = 'INSERT INTO face_meta (IMG_NAME, EMBEDDING) VALUES (?, ?)'
+        # label = label.split('/')[-1]
+        print(label)
         insert_args = (label, embedding.tobytes())
         cursor1.execute(insert_statement, insert_args)
         id = cursor1.lastrowid

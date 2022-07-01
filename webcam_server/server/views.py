@@ -81,11 +81,11 @@ def add_data(request):
         snumber = request.POST['snumber']
         date = datetime.datetime.now().date()
         time = datetime.datetime.now().time()
-        username = 'Dhairya'
+        username = 'Nirma_CSE'
 
         print(blacklist, category, gender)
         data = Face(name=name, rank=rank, number=number, adharno=aadhar, blacklist=blacklist, cat=category,
-                      gender=gender, snumber=snumber, date=date, time=time, username=username)
+                      gender=gender, snumber=snumber, date=date, time=time, username=username, picclick=False)
         try:
             original_umask = os.umask(0o777)
             os.mkdir(f'C:/Users/Administrator/Datasets/dataset/{aadhar}')
@@ -98,9 +98,8 @@ def add_data(request):
             imgstr = b64decode(imgstr)
             with open(f'C:/Users/Administrator/Datasets/dataset/{aadhar}' + '/' + f"photo{i}.png", "wb") as fh:
                 fh.write(imgstr)
-
-        # add_new_instance(adharno_path=dest_path)
-        # data.save()
+        add_new_instance(adharno_path=f'C:/Users/Administrator/Datasets/dataset/{aadhar}')
+        data.save()
         return HttpResponse("success")
     return HttpResponse("Failed!: POST request expected")
 
@@ -148,3 +147,6 @@ def index(request):
     # print("BOBO")
     return render(request, 'index.html')
 
+@csrf_exempt
+def newentry(request):
+    return render(request, "Form.html")

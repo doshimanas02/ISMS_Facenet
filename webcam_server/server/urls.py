@@ -7,4 +7,5 @@ urlpatterns = [
     path('saveDetails/', views.add_data, name='saveDetails'),
     path('makeEntry/', views.entry, name='entry'),
     path('', views.index, name='index'),
+    path('newEntry/', views.newentry, name='newentry')
 ]

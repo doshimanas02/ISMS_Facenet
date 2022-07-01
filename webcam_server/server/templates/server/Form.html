@@ -1,0 +1,98 @@
+<html>
+    <head>
+        <title>Add New User Details</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<!--        <script src="webcam_server/server/templates/server/my.js"></script>-->
+        <script>
+   document.addEventListener("DOMContentLoaded", () => {
+        var clickPhotos = document.getElementById('click5Photos');
+        var submitData = document.getElementById('submit');
+        let canvas = document.querySelector("#canvas");
+        var video = document.getElementById("vid");
+        var mediaDevices = navigator.mediaDevices;
+        photos = [];
+        clickPhotos.addEventListener("click", () => {
+            photos.length = 0;
+            mediaDevices
+                .getUserMedia({
+                    video: true,
+                    audio: false,
+                })
+                .then((stream) => {
+                    // Changing the source of video to current stream.
+                    video.srcObject = stream;
+                    video.addEventListener("loadedmetadata", () => {
+                        video.play();
+                    });
+
+                    function sleep(ms) {
+                        return new Promise(resolve => setTimeout(resolve, ms));
+                    }
+
+                    async function send_data() {
+                        var photos = [];
+                        for (i = 0; i < 5; i++) {
+                            await sleep(1000);
+                            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                            let image_data_url = canvas.toDataURL('image/jpeg');
+                            photos[i] = image_data_url;
+                        }
+                        console.log(photos);
+                    }
+                });
+            })
+            submitData.addEventListener("click", () => {
+            var nm = document.querySelector('name').value;
+            var rank = document.querySelector('rank').value;
+            var number = document.querySelector('number').value;
+            var gender = document.querySelector('input[name="gender"]:checked').value;
+            var snumber = document.querySelector('snumber').value;
+            var category = document.querySelector('category').value;
+            var blacklist = document.querySelector('input[name="blacklist"]:checked').value;
+            var form = new FormData();
+            form.append("name", nm);
+            form.append("rank", rank);
+            form.append("number", number);
+            form.append("blacklist", blacklist);
+            form.append("category", category);
+            form.append("gender", gender);
+            form.append("snumber", snumber);
+            form.append('photo0', photos[0]);
+            form.append('photo1', photos[1]);
+            form.append('photo2', photos[2]);
+            form.append('photo3', photos[3]);
+            form.append('photo4', photos[4]);
+
+            $.ajax({
+                type: "POST",
+                url: "/saveDetails/",
+                data: form,
+                // {'photo0': photos[0], 'photo1': photos[1], 'photo2': photos[2], 'photo3': photos[3], 'photo4': photos[4]},
+                success: function(data){
+                    print_data(data);
+                }
+            });
+        });
+    }
+);
+        </script>
+    </head>
+    <body>
+        Name: <input type="text" id="name" placeholder="name"/><br>
+        Rank: <input type="text" id="rank" placeholder="rank"/><br>
+        Number: <input type="text" id="number" placeholder="Phone number"/><br>
+        Blacklist: <input type="radio" id="bk_y" name="blacklist" value="Yes">
+        <label for="bk_y">Yes</label><br>
+        <input type="radio" id="bk_n" name="blacklist" value="No">
+        <label for="bk_n">No</label><br>
+        Category: <input type="text" id="category" placeholder="category"/><br>
+        Gender: <input type="radio" id="g_m" name="gender" value="Male">
+        <label for="g_m">Male</label><br>
+        <input type="radio" id="g_f" name="gender" value="Female">
+        <label for="g_f">Female</label><br>
+        <input type="text" id="snumber" placeholder="snumber"/><br>
+        <button id="click5Photos">Click Photos</button><br>
+            <button id="submit">Submit</button><br>
+        <canvas style = "display: none;" id="canvas" width="320" height="240"></canvas>
+    </body>
+</html>

@@ -14,7 +14,8 @@ def add_new_instance(adharno_path):
 
 
 def main():
-    pass
+    path = r'C:/Users/Administrator/Datasets/dataset/'
+    add_new_instance(path + '312079530891')
 
 
 if __name__ == "__main__":

@@ -4,6 +4,8 @@ from .detect_faces_dlib import dlib_corrected
 import pandas as pd
 from .generate_embeddings import get_embedding
 import numpy as np
+import matplotlib.pyplot as plt
+from PIL import Image
 
 connection = sqlite3.connect(
     r'C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\database\facialdb.db',
@@ -18,6 +20,7 @@ def predict(image):
     # print(pixel_array.shape)
     data = data.append({'img': pixel_array}, ignore_index=True)
     data_image = dlib_corrected(data, data_type='test')
+    # plt.imshow(data_image[0])
     if np.isnan(data_image).any():
         return 'unknown'
     embedding = get_embedding(data_image[0])
@@ -80,7 +83,7 @@ def predict(image):
     temp = min(sim_dict.values())
     res = [key for key in sim_dict if sim_dict[key] == temp]
     print(temp, res)
-    if temp < 0.3:
+    if temp < 0.6:
         return res
     else:
         return 'unknown'
@@ -94,8 +97,8 @@ def findCosineSimilarity(source_representation, test_representation):
 
 
 def main():
-    pass
-    # predict(r'C:\Users\Administrator\Datasets\temp.jpg')
+    image = Image.open(r'C:\Users\Administrator\Datasets\dataset\840482305750\temp2.jpg')
+    predict(image)
 
 
 if __name__ == '__main__':
