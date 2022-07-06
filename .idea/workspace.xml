@@ -4,16 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9acdfa3d-c03f-443c-b630-f09890ec138f" name="Changes" comment="Revert back to Numpy">
-      <change afterPath="$PROJECT_DIR$/webcam_server/server/templates/server/Form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webcam_server/server/templates/server/my.js" afterDir="false" />
+    <list default="true" id="9acdfa3d-c03f-443c-b630-f09890ec138f" name="Changes" comment="Confidence at 40% works">
+      <change afterPath="$PROJECT_DIR$/webcam_server/server/static/models/shape_predictor_5_face_landmarks.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24-06-2022_23_23_[Changes]1/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24-06-2022_23_23_[Changes]1/trained_model.clf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24-06-2022_23_23__Changes_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_25-06-2022_23_46_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_25-06-2022_23_46__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webcam_server/server/generate_embeddings.py" beforeDir="false" afterPath="$PROJECT_DIR$/webcam_server/server/generate_embeddings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webcam_server/server/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/webcam_server/server/detect_faces_dlib.py" beforeDir="false" afterPath="$PROJECT_DIR$/webcam_server/server/detect_faces_dlib.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webcam_server/server/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/webcam_server/server/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webcam_server/server/new_instance.py" beforeDir="false" afterPath="$PROJECT_DIR$/webcam_server/server/new_instance.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webcam_server/server/predict_target.py" beforeDir="false" afterPath="$PROJECT_DIR$/webcam_server/server/predict_target.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webcam_server/server/process_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/webcam_server/server/process_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webcam_server/server/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/webcam_server/server/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webcam_server/server/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/webcam_server/server/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -67,12 +70,13 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Administrator/PycharmProjects/ISMS_DeepFace/webcam_server/server/templates/server",
+    "last_opened_file_path": "C:/Users/Administrator/PycharmProjects/ISMS_DeepFace/webcam_server/server/static/models",
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\static\models" />
       <recent name="C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\templates\server" />
       <recent name="C:\Users\darvik07\Desktop\Server Today\webcam_server\server\static\models" />
       <recent name="C:\Users\darvik07\Desktop\Server Today\webcam_server\server" />
@@ -326,7 +330,14 @@
       <option name="project" value="LOCAL" />
       <updated>1656597897136</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Confidence at 40% works">
+      <created>1656675047607</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1656675047607</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -359,6 +370,7 @@
     <MESSAGE value="Face detection fixed, request with Aadhaar works" />
     <MESSAGE value="In Out Entry" />
     <MESSAGE value="Revert back to Numpy" />
-    <option name="LAST_COMMIT_MESSAGE" value="Revert back to Numpy" />
+    <MESSAGE value="Confidence at 40% works" />
+    <option name="LAST_COMMIT_MESSAGE" value="Confidence at 40% works" />
   </component>
 </project>

@@ -24,6 +24,8 @@ def process_image(request):
             prediction = predict(image)[0]
             if prediction != 'u':
                 user = retrieve_data(prediction)
+                if user == 'unknown':
+                    continue
                 return HttpResponse(json.dumps(user), content_type="application/json")
 
     return HttpResponse("unknown")
@@ -46,14 +48,7 @@ def retrieve_data(adhar):
             return udata
         except:
             pass
-    udata['Name'] = 'unknown'
-    udata['Rank'] = 'unknown'
-    udata['Number'] = 'unknown'
-    udata['Adhar'] = 'unknown'
-    udata['Cat'] = 'unknown'
-    udata['gender'] = 'unknown'
-    udata['B'] = 'unknown'
-    udata['snumber'] = 'unknown'
+    udata = 'unknown'
     return udata
 
 
@@ -61,7 +56,7 @@ def retrieve_data(adhar):
 def get_with_aadhaar(request):
     aadhar_no = request.POST['aadhaar']
     data = retrieve_data(aadhar_no)
-    if data['Name'] != 'unknown':
+    if data != 'unknown' and data['Name'] != 'unknown':
         return HttpResponse(json.dumps(data), content_type="application/json")
     else:
         return HttpResponse('unknown')
@@ -79,12 +74,13 @@ def add_data(request):
         category = request.POST['category']
         gender = request.POST['gender']
         snumber = request.POST['snumber']
+        tokenno = request.POST['token']
         date = datetime.datetime.now().date()
         time = datetime.datetime.now().time()
         username = 'Nirma_CSE'
 
         print(blacklist, category, gender)
-        data = Face(name=name, rank=rank, number=number, adharno=aadhar, blacklist=blacklist, cat=category,
+        data = Face(name=name, rank=rank, number=number, adharno=aadhar, blacklist=blacklist, cat=category, token = tokenno,
                       gender=gender, snumber=snumber, date=date, time=time, username=username, picclick=False)
         try:
             original_umask = os.umask(0o777)

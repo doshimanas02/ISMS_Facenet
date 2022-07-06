@@ -1,6 +1,6 @@
 import sqlite3
 from collections import defaultdict
-from .detect_faces_dlib import dlib_corrected
+from .detect_faces_dlib import dlib_corrected, dlib_deepface
 import pandas as pd
 from .generate_embeddings import get_embedding
 import numpy as np
@@ -19,7 +19,7 @@ def predict(image):
     pixel_array = np.asarray(image)
     # print(pixel_array.shape)
     data = data.append({'img': pixel_array}, ignore_index=True)
-    data_image = dlib_corrected(data, data_type='test')
+    data_image = dlib_deepface(data, data_type='test')
     # plt.imshow(data_image[0])
     if np.isnan(data_image).any():
         return 'unknown'

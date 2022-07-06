@@ -1,9 +1,12 @@
+import deepface.DeepFace
 import numpy as np
 import dlib
 import cv2
 import pandas as pd
+from deepface import DeepFace
 from facenet_pytorch import MTCNN
 import os
+from PIL import Image
 
 detector = dlib.cnn_face_detection_model_v1(
     r"C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\static\models\mmod_human_face_detector.dat")
@@ -55,6 +58,42 @@ def dlib_corrected(data, data_type='train'):
         if data_type == 'train':
             data_labels.append(data['class'][cnt])
     # Lastly we need to return the correct number of arrays
+    if data_type == 'train':
+        return np.array(data_images), np.array(data_labels)
+    else:
+        return np.array(data_images)
+
+
+def dlib_deepface(data, data_type="train"):
+    dim = (160, 160)
+    data_images = []
+    # If we are processing training data we need to keep track of the labels
+    if data_type == 'train':
+        data_labels = []
+    for cnt in range(0, len(data)):
+        print('Processing ', cnt)
+        image = data['img'][cnt]
+        backends = ['opencv', 'ssd', 'dlib', 'mtcnn']
+        detected_face = DeepFace.detectFace(image, detector_backend='dlib', enforce_detection=False)
+        all_zeros = not np.any(detected_face)
+        sub_images_data = []
+        if all_zeros:
+            if data_type == 'train':
+                sub_images_data = np.empty(dim + (3,))
+                sub_images_data[:] = np.nan
+            if data_type == 'test':
+                nan_images_data = np.empty(dim + (3,))
+                nan_images_data[:] = np.nan
+                sub_images_data.append(nan_images_data)
+        else:
+            rgbImg = cv2.resize(detected_face, dim, interpolation=cv2.INTER_AREA)
+            sub_images_data = rgbImg.copy()
+
+        data_images.append(sub_images_data)
+        # And add the label to the list
+        if data_type == 'train':
+            data_labels.append(data['class'][cnt])
+        # Lastly we need to return the correct number of arrays
     if data_type == 'train':
         return np.array(data_images), np.array(data_labels)
     else:

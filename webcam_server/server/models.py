@@ -17,6 +17,7 @@ class Face(models.Model):
     snumber = models.CharField(max_length=12)
     adharno = models.CharField(max_length=50)
     cat = models.CharField(max_length=50)
+    token = models.CharField(max_length=5)
     blacklist = models.CharField(max_length=50)
     gender = models.CharField(max_length=50)
     username = models.TextField(null=True)

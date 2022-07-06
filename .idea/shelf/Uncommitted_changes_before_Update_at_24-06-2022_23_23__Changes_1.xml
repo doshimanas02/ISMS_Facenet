@@ -1,9 +1,0 @@
-<changelist name="Uncommitted_changes_before_Update_at_24-06-2022_23_23_[Changes]1" date="1656093309559" recycled="true" deleted="true">
-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24-06-2022_23_23_[Changes]1/shelved.patch" />
-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 24-06-2022 23:23 [Changes]" />
-  <binary>
-    <option name="BEFORE_PATH" value="webcam_server/server/static/models/trained_model.clf" />
-    <option name="AFTER_PATH" value="webcam_server/server/static/models/trained_model.clf" />
-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24-06-2022_23_23_[Changes]1/trained_model.clf" />
-  </binary>
-</changelist>
