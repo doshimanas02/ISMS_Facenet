@@ -71,14 +71,16 @@ def dlib_deepface(data, data_type="train"):
     if data_type == 'train':
         data_labels = []
     for cnt in range(0, len(data)):
-        print('Processing ', cnt)
+        # print('Processing ', cnt)
         image = data['img'][cnt]
         backends = ['opencv', 'ssd', 'dlib', 'mtcnn']
         detected_face = DeepFace.detectFace(image, detector_backend='dlib', enforce_detection=False)
+        print(detected_face)
         all_zeros = not np.any(detected_face)
         sub_images_data = []
         if all_zeros:
             if data_type == 'train':
+                print('Appending NaN')
                 sub_images_data = np.empty(dim + (3,))
                 sub_images_data[:] = np.nan
             if data_type == 'test':

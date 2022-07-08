@@ -8,7 +8,7 @@ from PIL import Image
 def process(aadhaar_dir):
     data = pd.DataFrame(columns=['img', 'class'])
     aadhaar = aadhaar_dir.split('/')[-1]
-    print(aadhaar)
+    # print(aadhaar)
     for file in os.listdir(aadhaar_dir):
         np_array = create_array_from_image(aadhaar_dir + '/' + file)
         data = data.append({'img': np_array, 'class': aadhaar}, ignore_index=True)

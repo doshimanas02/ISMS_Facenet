@@ -20,8 +20,11 @@ def random_with_N_digits(n = 12):
 def add_new_instance(adharno_path):
     data = process(adharno_path)
     face_np_array, face_np_label = dlib_deepface(data)
+    if np.isnan(face_np_array).any():
+        return -1
     load_and_execute(face_np_array, face_np_label)
-    print('Inserted new entries to DB')
+    # print('Inserted new entries to DB')
+    return 0
 
 
 def make_dir_fail_safe(path, folder):
@@ -33,11 +36,9 @@ def make_dir_fail_safe(path, folder):
 
 
 def main():
-    path = r'C:/Users/Administrator/Datasets/dataset/'
-    add_new_instance(path + '918800518581')
-    # for folder in os.listdir(path):
-    #     add_new_instance(path + folder)
-
+    path = r'C:/Users/Administrator/Datasets/new/'
+    for folder in os.listdir(path):
+        add_new_instance(path + folder)
 
 
 if __name__ == "__main__":

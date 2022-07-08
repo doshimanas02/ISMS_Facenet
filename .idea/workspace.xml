@@ -4,19 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9acdfa3d-c03f-443c-b630-f09890ec138f" name="Changes" comment="Confidence at 40% works">
-      <change afterPath="$PROJECT_DIR$/webcam_server/server/static/models/shape_predictor_5_face_landmarks.dat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24-06-2022_23_23_[Changes]1/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24-06-2022_23_23_[Changes]1/trained_model.clf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24-06-2022_23_23__Changes_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_25-06-2022_23_46_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_25-06-2022_23_46__Changes_.xml" beforeDir="false" />
+    <list default="true" id="9acdfa3d-c03f-443c-b630-f09890ec138f" name="Changes" comment="Detect and Align Faces with DeepFace impl v1">
+      <change afterPath="$PROJECT_DIR$/webcam_server/server/retrieve_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webcam_server/server/detect_faces_dlib.py" beforeDir="false" afterPath="$PROJECT_DIR$/webcam_server/server/detect_faces_dlib.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webcam_server/server/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/webcam_server/server/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webcam_server/server/generate_embeddings.py" beforeDir="false" afterPath="$PROJECT_DIR$/webcam_server/server/generate_embeddings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webcam_server/server/new_instance.py" beforeDir="false" afterPath="$PROJECT_DIR$/webcam_server/server/new_instance.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webcam_server/server/predict_target.py" beforeDir="false" afterPath="$PROJECT_DIR$/webcam_server/server/predict_target.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webcam_server/server/process_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/webcam_server/server/process_dataset.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webcam_server/server/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/webcam_server/server/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -64,16 +59,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Administrator/PycharmProjects/ISMS_DeepFace/webcam_server/server/static/models",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Administrator/PycharmProjects/ISMS_DeepFace/webcam_server/server/static/models&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\static\models" />
@@ -89,7 +84,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.new_instance">
-    <configuration name="cuda_check" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="generate_embeddings" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ISMS_DeepFace" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -101,7 +96,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/webcam_server/server/cuda_check.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/webcam_server/server/generate_embeddings.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -219,8 +214,8 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.generate_embeddings" />
       <item itemvalue="Python.process_request" />
-      <item itemvalue="Python.cuda_check" />
       <item itemvalue="Python.new_instance" />
       <item itemvalue="Python.init_database" />
       <item itemvalue="Python.predict_target" />
@@ -229,9 +224,9 @@
       <list>
         <item itemvalue="Python.new_instance" />
         <item itemvalue="Python.predict_target" />
+        <item itemvalue="Python.generate_embeddings" />
         <item itemvalue="Python.process_request" />
         <item itemvalue="Python.init_database" />
-        <item itemvalue="Python.cuda_check" />
       </list>
     </recent_temporary>
   </component>
@@ -337,7 +332,14 @@
       <option name="project" value="LOCAL" />
       <updated>1656675047607</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Detect and Align Faces with DeepFace impl v1">
+      <created>1657113045186</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1657113045186</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -371,6 +373,18 @@
     <MESSAGE value="In Out Entry" />
     <MESSAGE value="Revert back to Numpy" />
     <MESSAGE value="Confidence at 40% works" />
-    <option name="LAST_COMMIT_MESSAGE" value="Confidence at 40% works" />
+    <MESSAGE value="Detect and Align Faces with DeepFace impl v1" />
+    <option name="LAST_COMMIT_MESSAGE" value="Detect and Align Faces with DeepFace impl v1" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/webcam_server/server/predict_target.py</url>
+          <line>112</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

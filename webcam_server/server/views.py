@@ -5,51 +5,32 @@ from django.views.decorators.csrf import csrf_exempt
 from pybase64 import b64decode
 import time
 import json, io
-from collections import defaultdict
-from .predict_target import predict
+from .predict_target import predict, predict_all
 from .new_instance import add_new_instance
 from PIL import Image
 from .models import Face, Save
-from django.db.models import Q
+from .retrieve_data import retrieve_data
+import shutil
+
 
 @csrf_exempt
 def process_image(request):
     path = r'C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\static\temp'
     if request.method == 'POST':
+        images = []
         for i in range(5):
             img_data = request.POST[f'photo{i}']
             format, imgstr = img_data.split(';base64,')
             imgstr = b64decode(imgstr)
             image = Image.open(io.BytesIO(imgstr))
-            prediction = predict(image)[0]
-            if prediction != 'u':
-                user = retrieve_data(prediction)
-                if user == 'unknown':
-                    continue
-                return HttpResponse(json.dumps(user), content_type="application/json")
-
+            result = predict(image)[0]
+            data = retrieve_data(result)
+            if data == 'u':
+                continue
+            else:
+                return HttpResponse(json.dumps(data), content_type="application/json")
+            # images.append(image)
     return HttpResponse("unknown")
-
-
-def retrieve_data(adhar):
-    udata = defaultdict()
-    print(adhar)
-    if adhar != 'unknown':
-        try:
-            data = Face.objects.get(adharno=adhar)
-            udata['Name'] = data.name
-            udata['Rank'] = data.rank
-            udata['Number'] = data.number
-            udata['Adhar'] = data.adharno
-            udata['Cat'] = data.cat
-            udata['gender'] = data.gender
-            udata['B'] = data.blacklist
-            udata['snumber'] = data.snumber
-            return udata
-        except:
-            pass
-    udata = 'unknown'
-    return udata
 
 
 @csrf_exempt
@@ -74,29 +55,36 @@ def add_data(request):
         category = request.POST['category']
         gender = request.POST['gender']
         snumber = request.POST['snumber']
-        tokenno = request.POST['token']
         date = datetime.datetime.now().date()
         time = datetime.datetime.now().time()
         username = 'Nirma_CSE'
 
-        print(blacklist, category, gender)
-        data = Face(name=name, rank=rank, number=number, adharno=aadhar, blacklist=blacklist, cat=category, token = tokenno,
+        # print(blacklist, category, gender)
+        data = Face(name=name, rank=rank, number=number, adharno=aadhar, blacklist=blacklist, cat=category,
                       gender=gender, snumber=snumber, date=date, time=time, username=username, picclick=False)
         try:
+            try:
+                if Face.objects.get(adharno=aadhar):
+                    return HttpResponse('User Details already exist in the database.')
+            except:
+                pass
             original_umask = os.umask(0o777)
             os.mkdir(f'C:/Users/Administrator/Datasets/dataset/{aadhar}')
-        except PermissionError or FileExistsError:
-            print("Permission denied or File already exists")
-            exit(1)
-        for i in range(5):
-            img_data = request.POST[f'photo{i}']
-            format, imgstr = img_data.split(';base64,')
-            imgstr = b64decode(imgstr)
-            with open(f'C:/Users/Administrator/Datasets/dataset/{aadhar}' + '/' + f"photo{i}.png", "wb") as fh:
-                fh.write(imgstr)
-        add_new_instance(adharno_path=f'C:/Users/Administrator/Datasets/dataset/{aadhar}')
-        data.save()
-        return HttpResponse("success")
+            for i in range(5):
+                img_data = request.POST[f'photo{i}']
+                format, imgstr = img_data.split(';base64,')
+                imgstr = b64decode(imgstr)
+                with open(f'C:/Users/Administrator/Datasets/dataset/{aadhar}' + '/' + f"photo{i}.png", "wb") as fh:
+                    fh.write(imgstr)
+            if add_new_instance(adharno_path=f'C:/Users/Administrator/Datasets/dataset/{aadhar}') == -1:
+                raise
+            data.save()
+            return HttpResponse("success")
+        except Exception as ex:
+            dirpath = f'C:/Users/Administrator/Datasets/dataset/{aadhar}'
+            if os.path.exists(dirpath) and os.path.isdir(dirpath):
+                os.system('rmdir /S /Q "{}"'.format(dirpath))
+            return HttpResponse('Some error occured when entering database. Error as follows: ', ex)
     return HttpResponse("Failed!: POST request expected")
 
 @csrf_exempt
@@ -116,7 +104,7 @@ def entry(request):
             token = request.POST['token']
             datein = datetime.datetime.now().date()
             timein = datetime.datetime.now().time()
-
+            # print("Token: ", token)
             add_to_db = Save(name=name, rank=rank, number=number, adharno=aadhar, blacklist=blacklist, cat=category,
                           snumber=snumber, datein=datein, timein=timein, token=token)
             add_to_db.save()
