@@ -15,7 +15,6 @@ import shutil
 
 @csrf_exempt
 def process_image(request):
-    path = r'C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\static\temp'
     if request.method == 'POST':
         images = []
         for i in range(5):
@@ -45,7 +44,7 @@ def get_with_aadhaar(request):
 
 @csrf_exempt
 def add_data(request):
-    path = "C:/Users/Administrator/Datasets/dataset"
+    path = "C:/Users/doshi/Datasets/dataset"
     if request.method == 'POST':
         name = request.POST['name']
         rank = request.POST['rank']
@@ -69,19 +68,19 @@ def add_data(request):
             except:
                 pass
             original_umask = os.umask(0o777)
-            os.mkdir(f'C:/Users/Administrator/Datasets/dataset/{aadhar}')
+            os.mkdir(f'C:/Users/doshi/Datasets/dataset/{aadhar}')
             for i in range(5):
                 img_data = request.POST[f'photo{i}']
                 format, imgstr = img_data.split(';base64,')
                 imgstr = b64decode(imgstr)
-                with open(f'C:/Users/Administrator/Datasets/dataset/{aadhar}' + '/' + f"photo{i}.png", "wb") as fh:
+                with open(f'C:/Users/doshi/Datasets/dataset/{aadhar}' + '/' + f"photo{i}.png", "wb") as fh:
                     fh.write(imgstr)
-            if add_new_instance(adharno_path=f'C:/Users/Administrator/Datasets/dataset/{aadhar}') == -1:
+            if add_new_instance(adharno_path=f'C:/Users/doshi/Datasets/dataset/{aadhar}') == -1:
                 raise
             data.save()
             return HttpResponse("success")
         except Exception as ex:
-            dirpath = f'C:/Users/Administrator/Datasets/dataset/{aadhar}'
+            dirpath = f'C:/Users/doshi/Datasets/dataset/{aadhar}'
             if os.path.exists(dirpath) and os.path.isdir(dirpath):
                 os.system('rmdir /S /Q "{}"'.format(dirpath))
             return HttpResponse('Some error occured when entering database. Error as follows: ', ex)

@@ -4,7 +4,7 @@ from .models import Face
 from pybase64 import b64decode, b64encode
 from PIL import Image
 
-path = 'C:/Users/Administrator/Datasets/dataset/'
+path = 'C:/Users/doshi/Datasets/dataset/'
 def retrieve_data(adhar):
     udata = defaultdict()
     # print(adhar)

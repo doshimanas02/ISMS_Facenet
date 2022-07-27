@@ -9,7 +9,7 @@ import os
 from PIL import Image
 
 detector = dlib.cnn_face_detection_model_v1(
-    r"C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\static\models\mmod_human_face_detector.dat")
+    r"D:\WhitespaceVoid\Projects\PycharmProjects\ISMS_DeepFace\webcam_server\server\static\models\mmod_human_face_detector.dat")
 
 
 def rect_to_bb(rect):
@@ -134,12 +134,13 @@ def process_faces(image, rects, dim, data_type='train'):
 
 
 def main():
-    path = 'C:/Users/Administrator/PycharmProjects/ISMS_DeepFace/webcam_server/server'
-    data = pd.read_pickle(path + '/static/dataset.pkl')
-    # print(data['class'])
-    arr1, arr2 = dlib_corrected(data)
-    np.save(path + '/static/data1.pkl', arr=arr1)
-    np.save(path + '/static/data2.pkl', arr=arr2)
+    pass
+    # path = 'C:/Users/dos/PycharmProjects/ISMS_DeepFace/webcam_server/server'
+    # data = pd.read_pickle(path + '/static/dataset.pkl')
+    # # print(data['class'])
+    # arr1, arr2 = dlib_corrected(data)
+    # np.save(path + '/static/data1.pkl', arr=arr1)
+    # np.save(path + '/static/data2.pkl', arr=arr2)
 
 
 if __name__ == "__main__":

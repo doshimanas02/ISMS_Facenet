@@ -19,4 +19,3 @@ def create_array_from_image(file_path):
     image = Image.open(file_path)
     np_array = np.asarray(image)
     return np_array
-

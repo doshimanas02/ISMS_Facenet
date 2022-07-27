@@ -20,14 +20,14 @@ def most_frequent(ls):
 
 
 connection = sqlite3.connect(
-    r'C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\database\facialdb.db',
+    r'D:\WhitespaceVoid\Projects\PycharmProjects\ISMS_DeepFace\webcam_server\server\database\facialdb.db',
     check_same_thread=False)
 
 
 # cursor = c()
 def predict(image):
     connection = sqlite3.connect(
-        r'C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\database\facialdb.db',
+        r'D:\WhitespaceVoid\Projects\PycharmProjects\ISMS_DeepFace\webcam_server\server\database\facialdb.db',
         check_same_thread=False)
     cursor = connection.cursor()
     data = pd.DataFrame(columns=['img'])

@@ -1,14 +1,12 @@
 import time
-
 import numpy as np
 import pandas as pd
 from deepface import DeepFace
 from keras.models import load_model
-import numpy as np
 import sqlite3
 
 model = load_model(
-    r'C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\static\models\facenet_keras.h5')
+    r'D:\WhitespaceVoid\Projects\PycharmProjects\ISMS_DeepFace\webcam_server\server\static\models\facenet_keras.h5')
 
 
 def get_embedding(face_pixels):
@@ -26,7 +24,7 @@ def get_embedding(face_pixels):
 
 def load_and_execute(face_array, label_array):
     connection = sqlite3.connect(
-        r'C:\Users\Administrator\PycharmProjects\ISMS_DeepFace\webcam_server\server\database\facialdb.db')
+        r'D:\WhitespaceVoid\Projects\PycharmProjects\ISMS_DeepFace\webcam_server\server\database\facialdb.db')
     cursor1 = connection.cursor()
     cursor2 = connection.cursor()
 
